@@ -1,0 +1,412 @@
+:root {
+    --primary-color: #64b5f6; /* Light blue for accents */
+    --primary-hover: #42a5f5;
+    --secondary-color: #81c784; /* Light green for success */
+    --secondary-hover: #66bb6a;
+    --danger-color: #e57373; /* Light red for danger */
+    --danger-hover: #ef5350;
+    --warning-color: #ffb74d; /* Light orange for warning */
+    --warning-hover: #ffa726;
+    --info-color: #ba68c8; /* Light purple for info */
+
+    --dark-bg: #212121; /* Main dark background */
+    --dark-bg-alt: #303030; /* Slightly lighter dark background for cards/sections */
+    --dark-bg-light: #424242; /* Even lighter dark background for inputs/dynamic items */
+
+    --light-text: #e0e0e0; /* Light text for dark backgrounds */
+    --dark-text: #bdbdbd; /* Slightly darker light text for labels/secondary info */
+
+    --border-color: #424242; /* Darker border for elements */
+    --border-dashed: #616161; /* Darker dashed border */
+
+    --code-bg: #1a1a1a; /* Very dark background for code blocks */
+    --code-color: #ffeb3b; /* Yellowish text for code */
+
+    --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--dark-bg);
+    color: var(--light-text);
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--dark-bg-alt);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+h1, h2 {
+    color: var(--light-text);
+    text-align: center;
+}
+
+/* Collapsible Fieldset Styling */
+.collapsible-fieldset {
+    border: none;
+    padding: 0;
+    margin-bottom: 20px;
+    background: var(--dark-bg-alt);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.collapsible-header {
+    background-color: var(--primary-color);
+    color: var(--dark-bg);
+    padding: 15px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.collapsible-header legend {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin: 0;
+    padding: 0;
+    color: var(--dark-bg);
+}
+
+.collapse-icon {
+    font-size: 1.5em;
+    transition: transform 0.3s ease;
+    color: var(--dark-bg); /* Ensure icon color is dark for contrast */
+}
+
+.collapsible-fieldset.collapsed .collapse-icon {
+    transform: rotate(-90deg);
+}
+
+.collapsible-content {
+    padding: 20px;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    max-height: 70vh; /* Adjusted for better responsiveness */
+    opacity: 1;
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.collapsible-fieldset.collapsed .collapsible-content {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/* General UI Improvements */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--dark-text);
+}
+
+input[type="text"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid #555; /* Slightly lighter border for contrast */
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1em;
+    color: var(--light-text);
+    background-color: #2c2c2c; /* Darker background for inputs */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3); /* Inner shadow for depth */
+}
+
+textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    color: var(--dark-bg);
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+.add-btn {
+    background-color: var(--secondary-color);
+    margin-top: 10px;
+}
+
+.add-btn:hover {
+    background-color: var(--secondary-hover);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#generate-btn {
+    width: 100%;
+    background-color: var(--primary-color);
+    font-size: 1.2em; /* Slightly larger font */
+    padding: 18px; /* More padding */
+    margin-top: 30px; /* More margin-top */
+    border-radius: 8px; /* Slightly more rounded corners */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4); /* More pronounced shadow */
+    transition: all 0.3s ease; /* Smoother transition */
+}
+
+#generate-btn:hover {
+    background-color: var(--primary-hover);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Even more pronounced shadow on hover */
+    transform: translateY(-2px); /* Subtle lift effect */
+}
+
+.output-container {
+    margin-top: 40px;
+    padding: 25px;
+    background-color: var(--dark-bg-alt);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+#output-json {
+    background-color: var(--code-bg);
+    color: var(--code-color);
+    padding: 20px;
+    border-radius: 6px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 450px;
+    overflow-y: auto;
+    font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+    font-size: 0.95em;
+}
+
+#copy-btn {
+    display: inline-block;
+    margin-top: 15px;
+    background-color: var(--warning-color);
+    color: var(--dark-bg); /* Ensure text is dark for contrast */
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 10px 18px; /* Adjusted padding */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+#copy-btn:hover {
+    background-color: var(--warning-hover);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* More pronounced shadow on hover */
+    transform: translateY(-1px); /* Subtle lift */
+}
+
+.dynamic-item {
+    border: 1px dashed var(--border-dashed);
+    padding: 18px;
+    margin-bottom: 18px;
+    border-radius: 6px;
+    position: relative;
+    background-color: var(--dark-bg-light);
+}
+
+.remove-btn {
+    position: absolute;
+    top: 5px; /* Adjust position slightly */
+    right: 5px; /* Adjust position slightly */
+    background-color: transparent;
+    color: #ff6b6b; /* A more vibrant red for visibility */
+    border: 2px solid #ff6b6b; /* Thicker border for better definition */
+    border-radius: 50%;
+    width: 32px; /* Increased size */
+    height: 32px; /* Ensure it's a perfect circle */
+    font-weight: bold;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    font-size: 1.2em; /* Larger font size for the 'X' */
+    padding: 0;
+    box-shadow: none;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.remove-btn:hover {
+    background-color: #ff6b6b; /* Fill with red on hover */
+    color: var(--dark-bg); /* Change text to dark on hover */
+    transform: scale(1.1); /* Slightly more pronounced hover effect */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4); /* More visible shadow on hover */
+}
+
+.add-item-btn {
+    background-color: var(--info-color);
+    margin-left: 10px;
+    font-size: 0.9em;
+    padding: 8px 15px;
+    margin-top: 10px;
+}
+
+#scene-audio-input, #scene-visual-input {
+    margin-bottom: 15px; /* Add margin to separate from buttons */
+}
+
+.dynamic-list-container .list-item {
+    background: var(--dark-bg-light);
+    padding: 8px 15px;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    position: relative; /* Add this line */
+}
+
+.output-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.output-actions button {
+    flex-grow: 1;
+    min-width: 120px;
+    border-radius: 6px; /* Consistent border-radius */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Consistent shadow */
+    transition: all 0.2s ease; /* Smooth transitions */
+}
+
+.output-actions button:hover {
+    transform: translateY(-1px); /* Subtle lift on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* More pronounced shadow on hover */
+}
+
+.secondary-btn {
+    background-color: var(--info-color);
+    color: var(--dark-bg); /* Ensure text is dark for contrast */
+    font-weight: 600;
+}
+.secondary-btn:hover {
+    background-color: #9c27b0;
+}
+
+.danger-btn {
+    background-color: var(--danger-color);
+    color: var(--dark-bg); /* Ensure text is dark for contrast */
+    font-weight: 600;
+}
+.danger-btn:hover {
+    background-color: var(--danger-hover);
+}
+
+#toast-container {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.toast {
+    padding: 18px 25px;
+    border-radius: 6px;
+    color: var(--dark-bg);
+    font-size: 1em;
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.success {
+    background-color: var(--secondary-color);
+}
+
+.toast.error {
+    background-color: var(--danger-color);
+}
+
+.toast.info {
+    background-color: var(--primary-color);
+}
+
+.dynamic-item-nested {
+    border-left: 4px solid var(--primary-color);
+    padding-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: var(--dark-bg-light);
+    border-radius: 4px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+h5 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: var(--light-text);
+    font-size: 1.1em;
+}
+
+.scene-subsection {
+    margin-bottom: 25px; /* Add space between audio and visual subsections */
+    padding-top: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+.scene-subsection:first-of-type {
+    border-top: none;
+    padding-top: 0;
+}
+
+.scene-subsection h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--light-text);
+}
+
+#characters-container,
+#scene-audio-container,
+#scene-visual-container {
+    max-height: 700px; /* Increased height for more visible elements */
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 20px;
+}
+
+/* Style for the scrollbar (optional) */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-bg-light);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-hover);
+}
