@@ -21,6 +21,20 @@
         <form id="prompt-form">
             
 
+            <!-- CHARACTERS (DYNAMIC CONTAINER) -->
+            <fieldset class="collapsible-fieldset collapsed">
+                <div class="collapsible-header">
+                    <legend>Characters</legend>
+                    <span class="collapse-icon">&#9660;</span>
+                </div>
+                <div class="collapsible-content">
+                    <div id="characters-container">
+                        <!-- Characters will be added here by JavaScript -->
+                    </div>
+                    <button type="button" class="add-btn" id="add-character-btn">Add Character</button>
+                </div>
+            </fieldset>
+
             <!-- CAMERA -->
             <fieldset class="collapsible-fieldset collapsed">
                 <div class="collapsible-header">
@@ -117,33 +131,11 @@
                     <label for="scene-environment">Environment:</label>
                     <textarea id="scene-environment" name="scene-environment" rows="4" placeholder="e.g., Dusty Victorian foyer with cobwebs, chandelier..."></textarea>
                     
-                    <div class="scene-subsection">
-                        <h4>Audio Cues</h4>
-                        <div id="scene-audio-container" class="dynamic-list-container"></div>
-                        <input type="text" id="scene-audio-input" placeholder="Add audio cue (e.g., Ambient wind)">
-                        <button type="button" class="add-item-btn" data-target="scene-audio">Add Audio</button>
-                    </div>
+                    <label for="scene-audio">Audio Cues:</label>
+                    <textarea id="scene-audio" name="scene-audio" rows="4" placeholder="e.g., Ambient wind"></textarea>
 
-                    <div class="scene-subsection">
-                        <h4>Visual Cues</h4>
-                        <div id="scene-visual-container" class="dynamic-list-container"></div>
-                        <input type="text" id="scene-visual-input" placeholder="Add visual cue (e.g., Character does not look at camera)">
-                        <button type="button" class="add-item-btn" data-target="scene-visual">Add Visual</button>
-                    </div>
-                </div>
-            </fieldset>
-
-            <!-- CHARACTERS (DYNAMIC CONTAINER) -->
-            <fieldset class="collapsible-fieldset collapsed">
-                <div class="collapsible-header">
-                    <legend>Characters</legend>
-                    <span class="collapse-icon">&#9660;</span>
-                </div>
-                <div class="collapsible-content">
-                    <div id="characters-container">
-                        <!-- Characters will be added here by JavaScript -->
-                    </div>
-                    <button type="button" class="add-btn" id="add-character-btn">Add Character</button>
+                    <label for="scene-visual">Visual Cues:</label>
+                    <textarea id="scene-visual" name="scene-visual" rows="4" placeholder="e.g., Character does not look at camera"></textarea>
                 </div>
             </fieldset>
 
@@ -170,46 +162,14 @@
         <div class="dynamic-item" data-character-id="">
             <button type="button" class="remove-btn" title="Remove character">X</button>
             <h4>Character</h4>
-            <label>Name:</label>
-            <input type="text" name="char_name" required>
             <label>Description:</label>
             <textarea name="char_desc" rows="3" placeholder="e.g., Chubby, balding, in his 50s. Wears a black T-shirt..."></textarea>
             <label>Wardrobe:</label>
-            <input type="text" name="char_wardrobe" placeholder="e.g., Black t-shirt, ripped jeans, leather jacket...">
-
-            <div class="dynamic-item-nested">
-                <h5>Dialogue</h5>
-                <div class="dialogue-container"></div>
-                <button type="button" class="add-btn add-dialogue-btn">Add Dialogue Line</button>
-            </div>
-
-            <div class="dynamic-item-nested">
-                <h5>Actions</h5>
-                <div class="actions-container"></div>
-                <button type="button" class="add-btn add-action-btn">Add Action</button>
-            </div>
-        </div>
-    </template>
-
-    <template id="dialogue-template">
-        <div class="dynamic-item">
-            <button type="button" class="remove-btn" title="Remove dialogue">X</button>
-            <label>Dialogue Line:</label>
-            <input type="text" name="dialogue_line" required>
-        </div>
-    </template>
-
-    <template id="action-template">
-        <div class="dynamic-item">
-            <button type="button" class="remove-btn" title="Remove action">X</button>
-            <label>Entry:</label>
-            <input type="text" name="action_entry" placeholder="e.g., Walks in from screen left">
-            <label>Movement:</label>
-            <input type="text" name="action_movement" placeholder="e.g., Crosses the room towards the window">
-            <label>Reaction:</label>
-            <textarea name="action_reaction" rows="2" placeholder="e.g., Jumps back in surprise"></textarea>
-            <label>Line (if speaking during action):</label>
-            <input type="text" name="action_line">
+            <textarea name="char_wardrobe" rows="3" placeholder="e.g., Black t-shirt, ripped jeans, leather jacket..."></textarea>
+            <label>Dialogue:</label>
+            <textarea name="char_dialogue" rows="3" placeholder="e.g., 'I have a bad feeling about this.'"></textarea>
+            <label>Action:</label>
+            <textarea name="char_action" rows="3" placeholder="e.g., Walks into the room and looks around."></textarea>
         </div>
     </template>
 
