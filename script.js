@@ -137,14 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const prompt = {
-            genre: document.getElementById('genre').value,
-            style: document.getElementById('style').value,
-            subtitles: document.getElementById('subtitles').checked,
             camera: {
-                type: document.getElementById('camera-type').value,
-                movement: document.getElementById('camera-movement').value,
-                framing: document.getElementById('camera-framing').value,
-                shot_type: document.getElementById('camera-shot_type').value,
+                camera_movement: document.getElementById('camera_movement').value,
+                lens_effects: document.getElementById('lens_effects').value,
+                style: document.getElementById('style').value,
+                temporal_elements: document.getElementById('temporal_elements').value,
             },
             characters: [],
             scene: {
@@ -303,9 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function applyLoadedDataToForm(data) {
         clearForm(false); // Clear form without showing toast
 
-        document.getElementById('genre').value = data.genre || '';
-        document.getElementById('style').value = data.style || '';
-        document.getElementById('subtitles').checked = data.subtitles || false;
+        
         document.getElementById('camera-type').value = data.camera?.type || '';
         document.getElementById('camera-movement').value = data.camera?.movement || '';
         document.getElementById('camera-framing').value = data.camera?.framing || '';
