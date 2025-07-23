@@ -3,13 +3,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('prompt-form');
     const outputJson = document.getElementById('output-json');
     const charactersContainer = document.getElementById('characters-container');
+    const timelineContainer = document.getElementById('timeline-container');
     const addCharacterBtn = document.getElementById('add-character-btn');
+    const addTimelineBtn = document.getElementById('add-timeline-btn');
     const generateBtn = document.getElementById('generate-btn');
     const copyBtn = document.getElementById('copy-btn');
     const saveBtn = document.getElementById('save-btn');
     const loadBtn = document.getElementById('load-btn');
     const clearBtn = document.getElementById('clear-btn');
     const characterTemplate = document.getElementById('character-template');
+    const timelineEventTemplate = document.getElementById('timeline-event-template');
 
     // --- UTILITY FUNCTIONS ---
     function showToast(message, type = 'info') {
@@ -41,6 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollToElement(characterEl);
     }
 
+    function addTimelineEvent() {
+        const timelineEl = cloneFromTemplate(timelineEventTemplate);
+        timelineEl.dataset.timelineId = `timeline-${Date.now()}`;
+        timelineContainer.appendChild(timelineEl);
+        scrollToElement(timelineEl);
+    }
+
     function removeDynamicItem(elementToRemove) {
         elementToRemove.remove();
     }
@@ -54,13 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const prompt = {
-            camera: {
-                camera_movement: document.getElementById('camera_movement').value,
-                lens_effects: document.getElementById('lens_effects').value,
-                style: document.getElementById('style').value,
-                temporal_elements: document.getElementById('temporal_elements').value,
-            },
-            characters: [],
             scene: {
                 environment: document.getElementById('scene-environment').value,
                 location: document.getElementById('scene-location').value,
@@ -68,6 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 audio: document.getElementById('scene-audio').value,
                 visual: document.getElementById('scene-visual').value
             },
+            camera: {
+                camera_movement: document.getElementById('camera_movement').value,
+                lens_effects: document.getElementById('lens_effects').value,
+                style: document.getElementById('style').value,
+                temporal_elements: document.getElementById('temporal_elements').value,
+            },
+            characters: [],
+            timeline: [],
         };
 
         charactersContainer.querySelectorAll('[data-character-id]').forEach(charEl => {
@@ -80,6 +91,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 action: charEl.querySelector('[name="char_action"]').value
             };
             prompt.characters.push(characterData);
+        });
+
+        prompt.timeline = [];
+        timelineContainer.querySelectorAll('[data-timeline-id]').forEach((eventEl, index) => {
+            const timestamp = eventEl.querySelector('[name="timeline_timestamp"]').value;
+            const action = eventEl.querySelector('[name="timeline_action"]').value;
+            if (!action) return; // Skip empty actions
+
+            prompt.timeline.push({
+                sequence: index + 1,
+                timestamp: timestamp,
+                action: action,
+                audio: eventEl.querySelector('[name="timeline_audio"]').value
+            });
         });
 
         return prompt;
@@ -142,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function clearForm(showSuccessToast = true) {
         form.reset();
         charactersContainer.innerHTML = '';
+        timelineContainer.innerHTML = ''; // Clear timeline events
         outputJson.textContent = '';
         if (showSuccessToast) {
             showToast('Form cleared.', 'success');
@@ -178,11 +204,22 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+        if (data.timeline) {
+            data.timeline.forEach(event => {
+                addTimelineEvent();
+                const newTimelineEl = timelineContainer.lastElementChild;
+                newTimelineEl.querySelector('[name="timeline_timestamp"]').value = event.timestamp || '';
+                newTimelineEl.querySelector('[name="timeline_action"]').value = event.action || '';
+                newTimelineEl.querySelector('[name="timeline_audio"]').value = event.audio || '';
+            });
+        }
+
         generateBtn.click();
     }
 
     // --- EVENT LISTENERS ---
     addCharacterBtn.addEventListener('click', addCharacter);
+    addTimelineBtn.addEventListener('click', addTimelineEvent);
 
     document.body.addEventListener('click', (e) => {
         if (e.target.matches('.remove-btn')) {

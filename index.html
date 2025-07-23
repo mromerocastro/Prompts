@@ -21,17 +21,27 @@
         <form id="prompt-form">
             
 
-            <!-- CHARACTERS (DYNAMIC CONTAINER) -->
+            <!-- SCENE -->
             <fieldset class="collapsible-fieldset collapsed">
                 <div class="collapsible-header">
-                    <legend>Characters</legend>
+                    <legend>Scene</legend>
                     <span class="collapse-icon">&#9660;</span>
                 </div>
                 <div class="collapsible-content">
-                    <div id="characters-container">
-                        <!-- Characters will be added here by JavaScript -->
-                    </div>
-                    <button type="button" class="add-btn" id="add-character-btn">Add Character</button>
+                    <label for="scene-location">Location:</label>
+                    <textarea id="scene-location" name="scene-location" rows="4" placeholder="e.g., Abandoned mansion, bustling city street..."></textarea>
+
+                    <label for="scene-time_of_day">Time of Day:</label>
+                    <textarea id="scene-time_of_day" name="scene-time_of_day" rows="4" placeholder="e.g., Dusk, early morning, midnight..."></textarea>
+                    
+                    <label for="scene-environment">Environment:</label>
+                    <textarea id="scene-environment" name="scene-environment" rows="4" placeholder="e.g., Dusty Victorian foyer with cobwebs, chandelier..."></textarea>
+                    
+                    <label for="scene-audio">Audio Cues:</label>
+                    <textarea id="scene-audio" name="scene-audio" rows="4" placeholder="e.g., Ambient wind"></textarea>
+
+                    <label for="scene-visual">Visual Cues:</label>
+                    <textarea id="scene-visual" name="scene-visual" rows="4" placeholder="e.g., Character does not look at camera"></textarea>
                 </div>
             </fieldset>
 
@@ -115,27 +125,31 @@
                 </div>
             </fieldset>
 
-            <!-- SCENE -->
+            <!-- CHARACTERS (DYNAMIC CONTAINER) -->
             <fieldset class="collapsible-fieldset collapsed">
                 <div class="collapsible-header">
-                    <legend>Scene</legend>
+                    <legend>Characters</legend>
                     <span class="collapse-icon">&#9660;</span>
                 </div>
                 <div class="collapsible-content">
-                    <label for="scene-location">Location:</label>
-                    <textarea id="scene-location" name="scene-location" rows="4" placeholder="e.g., Abandoned mansion, bustling city street..."></textarea>
+                    <div id="characters-container">
+                        <!-- Characters will be added here by JavaScript -->
+                    </div>
+                    <button type="button" class="add-btn" id="add-character-btn">Add Character</button>
+                </div>
+            </fieldset>
 
-                    <label for="scene-time_of_day">Time of Day:</label>
-                    <textarea id="scene-time_of_day" name="scene-time_of_day" rows="4" placeholder="e.g., Dusk, early morning, midnight..."></textarea>
-                    
-                    <label for="scene-environment">Environment:</label>
-                    <textarea id="scene-environment" name="scene-environment" rows="4" placeholder="e.g., Dusty Victorian foyer with cobwebs, chandelier..."></textarea>
-                    
-                    <label for="scene-audio">Audio Cues:</label>
-                    <textarea id="scene-audio" name="scene-audio" rows="4" placeholder="e.g., Ambient wind"></textarea>
-
-                    <label for="scene-visual">Visual Cues:</label>
-                    <textarea id="scene-visual" name="scene-visual" rows="4" placeholder="e.g., Character does not look at camera"></textarea>
+            <!-- TIMELINE (DYNAMIC CONTAINER) -->
+            <fieldset class="collapsible-fieldset collapsed">
+                <div class="collapsible-header">
+                    <legend>Timeline</legend>
+                    <span class="collapse-icon">&#9660;</span>
+                </div>
+                <div class="collapsible-content">
+                    <div id="timeline-container">
+                        <!-- Timeline events will be added here by JavaScript -->
+                    </div>
+                    <button type="button" class="add-btn" id="add-timeline-btn">Add Timeline Event</button>
                 </div>
             </fieldset>
 
@@ -170,6 +184,19 @@
             <textarea name="char_dialogue" rows="3" placeholder="e.g., 'I have a bad feeling about this.'"></textarea>
             <label>Action:</label>
             <textarea name="char_action" rows="3" placeholder="e.g., Walks into the room and looks around."></textarea>
+        </div>
+    </template>
+
+    <template id="timeline-event-template">
+        <div class="dynamic-item" data-timeline-id="">
+            <button type="button" class="remove-btn" title="Remove event">X</button>
+            <h4>Timeline Event</h4>
+            <label>Timestamp:</label>
+            <input type="text" name="timeline_timestamp" placeholder="e.g., 00:00-00:01">
+            <label>Action:</label>
+            <textarea name="timeline_action" rows="3" placeholder="e.g., A cat jumps on the table."></textarea>
+            <label>Audio:</label>
+            <textarea name="timeline_audio" rows="3" placeholder="e.g., A soft meow."></textarea>
         </div>
     </template>
 
