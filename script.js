@@ -12,6 +12,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const characterTemplate = document.getElementById('character-template');
     const timelineEventTemplate = document.getElementById('timeline-event-template');
 
+    // Drawing Area DOM References
+    const drawingCanvas = document.getElementById('drawing-canvas');
+    const ctx = drawingCanvas.getContext('2d');
+    const colorPicker = document.getElementById('color-picker');
+    const brushSizeInput = document.getElementById('brush-size');
+    const clearCanvasBtn = document.getElementById('clear-canvas-btn');
+    const imageLoader = document.getElementById('image-loader');
+    const downloadImageBtn = document.getElementById('download-image-btn');
+
     // --- UTILITY FUNCTIONS ---
     function showToast(message, type = 'info') {
         const toastContainer = document.getElementById('toast-container');
@@ -167,6 +176,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- DRAWING LOGIC ---
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+    let brushColor = colorPicker.value;
+    let brushSize = brushSizeInput.value;
+
+    function setupCanvas() {
+        // Set canvas dimensions to match its display size
+        drawingCanvas.width = drawingCanvas.offsetWidth;
+        drawingCanvas.height = drawingCanvas.offsetHeight;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = brushColor;
+        ctx.lineWidth = brushSize;
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+
     // --- EVENT LISTENERS ---
     addCharacterBtn.addEventListener('click', addCharacter);
     addTimelineBtn.addEventListener('click', addTimelineEvent);
@@ -203,8 +238,103 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Drawing Area Event Listeners
+    drawingCanvas.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    });
+    drawingCanvas.addEventListener('mousemove', draw);
+    drawingCanvas.addEventListener('mouseup', () => isDrawing = false);
+    drawingCanvas.addEventListener('mouseout', () => isDrawing = false);
+
+    colorPicker.addEventListener('change', (e) => {
+        brushColor = e.target.value;
+        ctx.strokeStyle = brushColor;
+    });
+
+    brushSizeInput.addEventListener('change', (e) => {
+        brushSize = e.target.value;
+        ctx.lineWidth = brushSize;
+    });
+
+    clearCanvasBtn.addEventListener('click', () => {
+        ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+    });
+
+    downloadImageBtn.addEventListener('click', () => {
+        const image = drawingCanvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = 'drawing.png';
+        link.href = image;
+        link.click();
+    });
+
+    imageLoader.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            console.log('File selected:', file.name, file.type);
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                console.log('FileReader loaded result.');
+                const img = new Image();
+                img.onload = () => {
+                    console.log('Image loaded. Dimensions:', img.width, img.height);
+                    // Clear canvas before drawing new image
+                    ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+                    // Draw image, scaling it to fit the canvas while maintaining aspect ratio
+                    const aspectRatio = img.width / img.height;
+                    let newWidth = drawingCanvas.width;
+                    let newHeight = drawingCanvas.height;
+
+                    if (drawingCanvas.width / drawingCanvas.height > aspectRatio) {
+                        newWidth = drawingCanvas.height * aspectRatio;
+                    } else {
+                        newHeight = drawingCanvas.width / aspectRatio;
+                    }
+
+                    const x = (drawingCanvas.width - newWidth) / 2;
+                    const y = (drawingCanvas.height - newHeight) / 2;
+
+                    console.log('Drawing image with:', { x, y, newWidth, newHeight });
+                    ctx.drawImage(img, x, y, newWidth, newHeight);
+                };
+                img.onerror = () => {
+                    console.error('Error loading image.');
+                    showToast('Error loading image.', 'error');
+                };
+                img.src = event.target.result;
+            };
+            reader.onerror = () => {
+                console.error('Error reading file.');
+                showToast('Error reading file.', 'error');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            console.log('No file selected.');
+        }
+    });
+
     // --- INITIALIZATION ---
     clearForm(false);
+    setupCanvas();
+
+    // Adjust canvas size on window resize
+    window.addEventListener('resize', setupCanvas);
+
+    // Event listener for drawing area collapsible fieldset
+    const drawingAreaFieldset = Array.from(document.querySelectorAll('.collapsible-fieldset')).find(fieldset => {
+        const legend = fieldset.querySelector('.collapsible-header legend');
+        return legend && legend.textContent.trim() === 'Drawing Area';
+    });
+
+    if (drawingAreaFieldset) {
+        drawingAreaFieldset.querySelector('.collapsible-header').addEventListener('click', () => {
+            // Ensure canvas is correctly sized when expanded
+            if (!drawingAreaFieldset.classList.contains('collapsed')) {
+                setupCanvas();
+            }
+        });
+    }
 
     document.querySelectorAll('.collapsible-fieldset').forEach(fieldset => {
         const header = fieldset.querySelector('.collapsible-header');

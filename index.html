@@ -17,153 +17,179 @@
 </head>
 <body>
     <div class="container">
-        <h1>Video Prompt Generator</h1>
-        <form id="prompt-form">
-            
-
-            <!-- SCENE -->
-            <fieldset class="collapsible-fieldset collapsed">
-                <div class="collapsible-header">
-                    <legend>Scene</legend>
-                    <span class="collapse-icon">&#9660;</span>
-                </div>
-                <div class="collapsible-content">
-                    <label for="scene-location">Location:</label>
-                    <textarea id="scene-location" name="scene-location" rows="4" placeholder="e.g., Abandoned mansion, bustling city street..."></textarea>
-
-                    <label for="scene-time_of_day">Time of Day:</label>
-                    <textarea id="scene-time_of_day" name="scene-time_of_day" rows="4" placeholder="e.g., Dusk, early morning, midnight..."></textarea>
-                    
-                    <label for="scene-environment">Environment:</label>
-                    <textarea id="scene-environment" name="scene-environment" rows="4" placeholder="e.g., Dusty Victorian foyer with cobwebs, chandelier..."></textarea>
-                    
-                    <label for="scene-audio">Audio Cues:</label>
-                    <textarea id="scene-audio" name="scene-audio" rows="4" placeholder="e.g., Ambient wind"></textarea>
-
-                    <label for="scene-visual">Visual Cues:</label>
-                    <textarea id="scene-visual" name="scene-visual" rows="4" placeholder="e.g., Character does not look at camera"></textarea>
-                </div>
-            </fieldset>
-
-            <!-- CAMERA -->
-            <fieldset class="collapsible-fieldset collapsed">
-                <div class="collapsible-header">
-                    <legend>Camera</legend>
-                    <span class="collapse-icon">&#9660;</span>
-                </div>
-                <div class="collapsible-content">
-                    <label for="camera_movement">Camera Movement:</label>
-                    <select id="camera_movement" name="camera_movement">
-                        <option value="None">None</option>
-                        <option value="Static Shot (or fixed)">Static Shot (or fixed)</option>
-                        <option value="Pan (left)">Pan (left)</option>
-                        <option value="Pan (right)">Pan (right)</option>
-                        <option value="Tilt (up)">Tilt (up)</option>
-                        <option value="Tilt (down)">Tilt (down)</option>
-                        <option value="Dolly (In)">Dolly (In)</option>
-                        <option value="Dolly (Out)">Dolly (Out)</option>
-                        <option value="Zoom (In)">Zoom (In)</option>
-                        <option value="Zoom (Out)">Zoom (Out)</option>
-                        <option value="Truck (Left)">Truck (Left)</option>
-                        <option value="Truck (Right)">Truck (Right)</option>
-                        <option value="Pedestal (Up)">Pedestal (Up)</option>
-                        <option value="Pedestal (Down)">Pedestal (Down)</option>
-                        <option value="Crane Shot">Crane Shot</option>
-                        <option value="Aerial Shot">Aerial Shot</option>
-                        <option value="Drone Shot">Drone Shot</option>
-                        <option value="Handheld">Handheld</option>
-                        <option value="Shaky Cam">Shaky Cam</option>
-                        <option value="Whip Pan">Whip Pan</option>
-                        <option value="Arc Shot">Arc Shot</option>
-                    </select>
-
-                    <label for="lens_effects">Lens Effects:</label>
-                    <select id="lens_effects" name="lens_effects">
-                        <option value="None">None</option>
-                        <option value="Wide-Angle Lens (e.g., 24mm)">Wide-Angle Lens (e.g., 24mm)</option>
-                        <option value="Telephoto Lens (e.g., 85mm)">Telephoto Lens (e.g., 85mm)</option>
-                        <option value="Shallow Depth of Field">Shallow Depth of Field</option>
-                        <option value="Bokeh">Bokeh</option>
-                        <option value="Deep Depth of Field">Deep Depth of Field</option>
-                        <option value="Lens Flare">Lens Flare</option>
-                        <option value="Rack Focus">Rack Focus</option>
-                        <option value="Fisheye Lens Effect">Fisheye Lens Effect</option>
-                        <option value="Vertigo Effect (Dolly Zoom)">Vertigo Effect (Dolly Zoom)</option>
-                    </select>
-
-                    <label for="style">Style:</label>
-                    <select id="style" name="style">
-                        <option value="None">None</option>
-                        <option value="Photorealistic">Photorealistic</option>
-                        <option value="Cinematic">Cinematic</option>
-                        <option value="Vintage">Vintage</option>
-                        <option value="Japanese anime style">Japanese anime style</option>
-                        <option value="Claymation style">Claymation style</option>
-                        <option value="Stop-motion animation">Stop-motion animation</option>
-                        <option value="In the style of Van Gogh">In the style of Van Gogh</option>
-                        <option value="Surrealist painting">Surrealist painting</option>
-                        <option value="Monochromatic black and white">Monochromatic black and white</option>
-                        <option value="Vibrant and saturated">Vibrant and saturated</option>
-                        <option value="Film noir style">Film noir style</option>
-                        <option value="High-key lighting">High-key lighting</option>
-                        <option value="Low-key lighting">Low-key lighting</option>
-                        <option value="Golden hour glow">Golden hour glow</option>
-                        <option value="Volumetric lighting">Volumetric lighting</option>
-                        <option value="Backlighting to create a silhouette">Backlighting to create a silhouette</option>
-                    </select>
-
-                    <label for="temporal_elements">Temporal Elements:</label>
-                    <select id="temporal_elements" name="temporal_elements">
-                        <option value="None">None</option>
-                        <option value="Slow-motion">Slow-motion</option>
-                        <option value="Fast-paced action">Fast-paced action</option>
-                        <option value="Time-lapse">Time-lapse</option>
-                        <option value="Hyperlapse">Hyperlapse</option>
-                        <option value="Pulsating light">Pulsating light</option>
-                        <option value="Rhythmic movement">Rhythmic movement</option>
-                    </select>
-                </div>
-            </fieldset>
-
-            <!-- CHARACTERS (DYNAMIC CONTAINER) -->
-            <fieldset class="collapsible-fieldset collapsed">
-                <div class="collapsible-header">
-                    <legend>Characters</legend>
-                    <span class="collapse-icon">&#9660;</span>
-                </div>
-                <div class="collapsible-content">
-                    <div id="characters-container">
-                        <!-- Characters will be added here by JavaScript -->
-                    </div>
-                    <button type="button" class="add-btn" id="add-character-btn">Add Character</button>
-                </div>
-            </fieldset>
-
-            <!-- TIMELINE (DYNAMIC CONTAINER) -->
-            <fieldset class="collapsible-fieldset collapsed">
-                <div class="collapsible-header">
-                    <legend>Timeline</legend>
-                    <span class="collapse-icon">&#9660;</span>
-                </div>
-                <div class="collapsible-content">
-                    <div id="timeline-container">
-                        <!-- Timeline events will be added here by JavaScript -->
-                    </div>
-                    <button type="button" class="add-btn" id="add-timeline-btn">Add Timeline Event</button>
-                </div>
-            </fieldset>
-
-            <button type="submit" id="generate-btn">Generate Prompt</button>
-        </form>
-
-        <div class="output-container">
-            <h2>Generated Prompt</h2>
-            <p id="output-sentence"></p>
-            <div class="output-actions">
-                <button id="copy-btn">Copy to Clipboard</button>
-                <button id="clear-btn" class="danger-btn">Clear Form</button>
+        <fieldset class="collapsible-fieldset">
+            <div class="collapsible-header">
+                <legend>Video Prompt Generator</legend>
+                <span class="collapse-icon">&#9660;</span>
             </div>
-        </div>
+            <div class="collapsible-content">
+                <form id="prompt-form">
+                    
+
+                    <!-- SCENE -->
+                    <fieldset class="collapsible-fieldset collapsed">
+                        <div class="collapsible-header">
+                            <legend>Scene</legend>
+                            <span class="collapse-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <label for="scene-location">Location:</label>
+                            <textarea id="scene-location" name="scene-location" rows="4" placeholder="e.g., Abandoned mansion, bustling city street..."></textarea>
+
+                            <label for="scene-time_of_day">Time of Day:</label>
+                            <textarea id="scene-time_of_day" name="scene-time_of_day" rows="4" placeholder="e.g., Dusk, early morning, midnight..."></textarea>
+                            
+                            <label for="scene-environment">Environment:</label>
+                            <textarea id="scene-environment" name="scene-environment" rows="4" placeholder="e.g., Dusty Victorian foyer with cobwebs, chandelier..."></textarea>
+                            
+                            <label for="scene-audio">Audio Cues:</label>
+                            <textarea id="scene-audio" name="scene-audio" rows="4" placeholder="e.g., Ambient wind"></textarea>
+
+                            <label for="scene-visual">Visual Cues:</label>
+                            <textarea id="scene-visual" name="scene-visual" rows="4" placeholder="e.g., Character does not look at camera"></textarea>
+                        </div>
+                    </fieldset>
+
+                    <!-- CAMERA -->
+                    <fieldset class="collapsible-fieldset collapsed">
+                        <div class="collapsible-header">
+                            <legend>Camera</legend>
+                            <span class="collapse-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <label for="camera_movement">Camera Movement:</label>
+                            <select id="camera_movement" name="camera_movement">
+                                <option value="None">None</option>
+                                <option value="Static Shot (or fixed)">Static Shot (or fixed)</option>
+                                <option value="Pan (left)">Pan (left)</option>
+                                <option value="Pan (right)">Pan (right)</option>
+                                <option value="Tilt (up)">Tilt (up)</option>
+                                <option value="Tilt (down)">Tilt (down)</option>
+                                <option value="Dolly (In)">Dolly (In)</option>
+                                <option value="Dolly (Out)">Dolly (Out)</option>
+                                <option value="Zoom (In)">Zoom (In)</option>
+                                <option value="Zoom (Out)">Zoom (Out)</option>
+                                <option value="Truck (Left)">Truck (Left)</option>
+                                <option value="Truck (Right)">Truck (Right)</option>
+                                <option value="Pedestal (Up)">Pedestal (Up)</option>
+                                <option value="Pedestal (Down)">Pedestal (Down)</option>
+                                <option value="Crane Shot">Crane Shot</option>
+                                <option value="Aerial Shot">Aerial Shot</option>
+                                <option value="Drone Shot">Drone Shot</option>
+                                <option value="Handheld">Handheld</option>
+                                <option value="Shaky Cam">Shaky Cam</option>
+                                <option value="Whip Pan">Whip Pan</option>
+                                <option value="Arc Shot">Arc Shot</option>
+                            </select>
+
+                            <label for="lens_effects">Lens Effects:</label>
+                            <select id="lens_effects" name="lens_effects">
+                                <option value="None">None</option>
+                                <option value="Wide-Angle Lens (e.g., 24mm)">Wide-Angle Lens (e.g., 24mm)</option>
+                                <option value="Telephoto Lens (e.g., 85mm)">Telephoto Lens (e.g., 85mm)</option>
+                                <option value="Shallow Depth of Field">Shallow Depth of Field</option>
+                                <option value="Bokeh">Bokeh</option>
+                                <option value="Deep Depth of Field">Deep Depth of Field</option>
+                                <option value="Lens Flare">Lens Flare</option>
+                                <option value="Rack Focus">Rack Focus</option>
+                                <option value="Fisheye Lens Effect">Fisheye Lens Effect</option>
+                                <option value="Vertigo Effect (Dolly Zoom)">Vertigo Effect (Dolly Zoom)</option>
+                            </select>
+
+                            <label for="style">Style:</label>
+                            <select id="style" name="style">
+                                <option value="None">None</option>
+                                <option value="Photorealistic">Photorealistic</option>
+                                <option value="Cinematic">Cinematic</option>
+                                <option value="Vintage">Vintage</option>
+                                <option value="Japanese anime style">Japanese anime style</option>
+                                <option value="Claymation style">Claymation style</option>
+                                <option value="Stop-motion animation">Stop-motion animation</option>
+                                <option value="In the style of Van Gogh">In the style of Van Gogh</option>
+                                <option value="Surrealist painting">Surrealist painting</option>
+                                <option value="Monochromatic black and white">Monochromatic black and white</option>
+                                <option value="Vibrant and saturated">Vibrant and saturated</option>
+                                <option value="Film noir style">Film noir style</option>
+                                <option value="High-key lighting">High-key lighting</option>
+                                <option value="Low-key lighting">Low-key lighting</option>
+                                <option value="Golden hour glow">Golden hour glow</option>
+                                <option value="Volumetric lighting">Volumetric lighting</option>
+                                <option value="Backlighting to create a silhouette">Backlighting to create a silhouette</option>
+                            </select>
+
+                            <label for="temporal_elements">Temporal Elements:</label>
+                            <select id="temporal_elements" name="temporal_elements">
+                                <option value="None">None</option>
+                                <option value="Slow-motion">Slow-motion</option>
+                                <option value="Fast-paced action">Fast-paced action</option>
+                                <option value="Time-lapse">Time-lapse</option>
+                                <option value="Hyperlapse">Hyperlapse</option>
+                                <option value="Pulsating light">Pulsating light</option>
+                                <option value="Rhythmic movement">Rhythmic movement</option>
+                            </select>
+                        </div>
+                    </fieldset>
+
+                    <!-- CHARACTERS (DYNAMIC CONTAINER) -->
+                    <fieldset class="collapsible-fieldset collapsed">
+                        <div class="collapsible-header">
+                            <legend>Characters</legend>
+                            <span class="collapse-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div id="characters-container">
+                                <!-- Characters will be added here by JavaScript -->
+                            </div>
+                            <button type="button" class="add-btn" id="add-character-btn">Add Character</button>
+                        </div>
+                    </fieldset>
+
+                    <!-- TIMELINE (DYNAMIC CONTAINER) -->
+                    <fieldset class="collapsible-fieldset collapsed">
+                        <div class="collapsible-header">
+                            <legend>Timeline</legend>
+                            <span class="collapse-icon">&#9660;</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div id="timeline-container">
+                                <!-- Timeline events will be added here by JavaScript -->
+                            </div>
+                            <button type="button" class="add-btn" id="add-timeline-btn">Add Timeline Event</button>
+                        </div>
+                    </fieldset>
+
+                    <button type="submit" id="generate-btn">Generate Prompt</button>
+                </form>
+
+                <div class="output-container">
+                    <h2>Generated Prompt</h2>
+                    <p id="output-sentence"></p>
+                    <div class="output-actions">
+                        <button id="copy-btn">Copy to Clipboard</button>
+                        <button id="clear-btn" class="danger-btn">Clear Form</button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="collapsible-fieldset">
+            <div class="collapsible-header">
+                <legend>Drawing Area</legend>
+                <span class="collapse-icon">&#9660;</span>
+            </div>
+            <div class="collapsible-content">
+                <div id="drawing-toolbar">
+                    <label for="color-picker">Color:</label>
+                    <input type="color" id="color-picker" value="#ff0000">
+                    <label for="brush-size">Brush Size:</label>
+                    <input type="range" id="brush-size" min="1" max="20" value="5">
+                    <input type="file" id="image-loader" accept="image/*">
+                    <button id="clear-canvas-btn">Clear Canvas</button>
+                    <button id="download-image-btn">Download Image</button>
+                </div>
+                <canvas id="drawing-canvas"></canvas>
+            </div>
+        </fieldset>
     </div>
 
     <!-- Toast container for notifications -->
