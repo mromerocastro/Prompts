@@ -1,15 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- DOM REFERENCES ---
     const form = document.getElementById('prompt-form');
-    const outputJson = document.getElementById('output-json');
+    const outputSentence = document.getElementById('output-sentence');
     const charactersContainer = document.getElementById('characters-container');
     const timelineContainer = document.getElementById('timeline-container');
     const addCharacterBtn = document.getElementById('add-character-btn');
     const addTimelineBtn = document.getElementById('add-timeline-btn');
     const generateBtn = document.getElementById('generate-btn');
     const copyBtn = document.getElementById('copy-btn');
-    const saveBtn = document.getElementById('save-btn');
-    const loadBtn = document.getElementById('load-btn');
     const clearBtn = document.getElementById('clear-btn');
     const characterTemplate = document.getElementById('character-template');
     const timelineEventTemplate = document.getElementById('timeline-event-template');
@@ -110,111 +108,63 @@ document.addEventListener('DOMContentLoaded', () => {
         return prompt;
     }
 
-    async function saveToFile() {
-        if (!window.showSaveFilePicker) {
-            showToast('Your browser does not support saving files directly.', 'error');
-            return;
-        }
-        const promptData = generatePromptObject();
-        if (!promptData) return;
-        try {
-            const jsonString = JSON.stringify(promptData, null, 2);
-            const fileHandle = await window.showSaveFilePicker({
-                types: [{
-                    description: 'JSON Files',
-                    accept: { 'application/json': ['.json'] },
-                }],
-                suggestedName: 'veo3_prompt.json',
-            });
-            const writable = await fileHandle.createWritable();
-            await writable.write(jsonString);
-            await writable.close();
-            showToast('Prompt saved to file!', 'success');
-        } catch (error) {
-            if (error.name !== 'AbortError') {
-                console.error('Error saving file:', error);
-                showToast('Failed to save file.', 'error');
-            }
-        }
-    }
+    function generateSentence(promptData) {
+        if (!promptData) return '';
 
-    async function loadFromFile() {
-        if (!window.showOpenFilePicker) {
-            showToast('Your browser does not support loading files directly.', 'error');
-            return;
+        let sentence = '';
+
+        // Scene
+        if (promptData.scene) {
+            const { environment, location, time_of_day, audio, visual } = promptData.scene;
+            if (location) sentence += `In ${location}, `;
+            if (time_of_day) sentence += `at ${time_of_day}, `;
+            if (environment) sentence += `the scene is ${environment}. `;
+            if (audio) sentence += `The audio is ${audio}. `;
+            if (visual) sentence += `Visually, ${visual}. `;
         }
-        try {
-            const [fileHandle] = await window.showOpenFilePicker({
-                types: [{
-                    description: 'JSON Files',
-                    accept: { 'application/json': ['.json'] },
-                }],
-                multiple: false,
+
+        // Camera
+        if (promptData.camera) {
+            const { camera_movement, lens_effects, style, temporal_elements } = promptData.camera;
+            if (camera_movement && camera_movement !== 'None') sentence += `The camera ${camera_movement}. `;
+            if (lens_effects && lens_effects !== 'None') sentence += `It has ${lens_effects}. `;
+            if (style && style !== 'None') sentence += `The style is ${style}. `;
+            if (temporal_elements && temporal_elements !== 'None') sentence += `There are ${temporal_elements}. `;
+        }
+
+        // Characters
+        if (promptData.characters && promptData.characters.length > 0) {
+            promptData.characters.forEach((char, index) => {
+                sentence += `Character ${index + 1} is ${char.description}`;
+                if (char.wardrobe) sentence += ` wearing ${char.wardrobe}`;
+                if (char.action) sentence += `, ${char.action}`;
+                if (char.dialogue) sentence += ` and says, "${char.dialogue}"`;
+                sentence += '. ';
             });
-            const file = await fileHandle.getFile();
-            const contents = await file.text();
-            const data = JSON.parse(contents);
-            applyLoadedDataToForm(data);
-            showToast('Prompt loaded from file!', 'success');
-        } catch (error) {
-            if (error.name !== 'AbortError') {
-                console.error('Error loading file:', error);
-                showToast('Failed to load file.', 'error');
-            }
         }
+
+        // Timeline
+        if (promptData.timeline && promptData.timeline.length > 0) {
+            sentence += 'The timeline is as follows: ';
+            promptData.timeline.forEach(event => {
+                if (event.timestamp) sentence += `At ${event.timestamp}, `;
+                sentence += `${event.action}`;
+                if (event.audio) sentence += ` with audio of ${event.audio}`;
+                sentence += '. ';
+            });
+        }
+
+        return sentence.trim();
     }
 
     function clearForm(showSuccessToast = true) {
         form.reset();
         charactersContainer.innerHTML = '';
         timelineContainer.innerHTML = ''; // Clear timeline events
-        outputJson.textContent = '';
+        outputSentence.textContent = '';
         if (showSuccessToast) {
             showToast('Form cleared.', 'success');
         }
-    }
-
-    function applyLoadedDataToForm(data) {
-        clearForm(false);
-
-        if (data.camera) {
-            document.getElementById('camera_movement').value = data.camera.camera_movement || '';
-            document.getElementById('lens_effects').value = data.camera.lens_effects || '';
-            document.getElementById('style').value = data.camera.style || '';
-            document.getElementById('temporal_elements').value = data.camera.temporal_elements || '';
-        }
-
-        if (data.scene) {
-            document.getElementById('scene-environment').value = data.scene.environment || '';
-            document.getElementById('scene-location').value = data.scene.location || '';
-            document.getElementById('scene-time_of_day').value = data.scene.time_of_day || '';
-            document.getElementById('scene-audio').value = data.scene.audio || '';
-            document.getElementById('scene-visual').value = data.scene.visual || '';
-        }
-
-        if (data.characters) {
-            data.characters.forEach((char, index) => {
-                addCharacter();
-                const newCharacterEl = charactersContainer.lastElementChild;
-                newCharacterEl.querySelector('h4').textContent = `Character ${index + 1}`;
-                newCharacterEl.querySelector('[name="char_desc"]').value = char.description || '';
-                newCharacterEl.querySelector('[name="char_wardrobe"]').value = char.wardrobe || '';
-                newCharacterEl.querySelector('[name="char_dialogue"]').value = char.dialogue || '';
-                newCharacterEl.querySelector('[name="char_action"]').value = char.action || '';
-            });
-        }
-
-        if (data.timeline) {
-            data.timeline.forEach(event => {
-                addTimelineEvent();
-                const newTimelineEl = timelineContainer.lastElementChild;
-                newTimelineEl.querySelector('[name="timeline_timestamp"]').value = event.timestamp || '';
-                newTimelineEl.querySelector('[name="timeline_action"]').value = event.action || '';
-                newTimelineEl.querySelector('[name="timeline_audio"]').value = event.audio || '';
-            });
-        }
-
-        generateBtn.click();
     }
 
     // --- EVENT LISTENERS ---
@@ -232,13 +182,14 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const promptData = generatePromptObject();
         if (promptData) {
-            outputJson.textContent = JSON.stringify(promptData, null, 2);
+            const sentence = generateSentence(promptData);
+            outputSentence.textContent = sentence;
         }
     });
 
     copyBtn.addEventListener('click', () => {
-        if (outputJson.textContent) {
-            navigator.clipboard.writeText(outputJson.textContent)
+        if (outputSentence.textContent) {
+            navigator.clipboard.writeText(outputSentence.textContent)
                 .then(() => showToast('Copied to clipboard!', 'success'))
                 .catch(() => showToast('Failed to copy.', 'error'));
         } else {
@@ -246,8 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    saveBtn.addEventListener('click', saveToFile);
-    loadBtn.addEventListener('click', loadFromFile);
     clearBtn.addEventListener('click', () => {
         if (confirm('Are you sure you want to clear the entire form? Unsaved changes will be lost.')) {
             clearForm();
