@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Text Drawing DOM References
     const textInput = document.getElementById('text-input');
-    const textColorPicker = document.getElementById('text-color-picker');
     const fontSizeInput = document.getElementById('font-size');
     const addTextBtn = document.getElementById('add-text-btn');
 
@@ -208,7 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Text Drawing State
     let isAddingText = false;
     let currentText = '';
-    let currentTextColor = textColorPicker.value;
     let currentFontSize = fontSizeInput.value;
 
     // Undo/Redo History
@@ -287,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function drawText(text, x, y, color, fontSize) {
-        ctx.font = `${fontSize}px Arial`;
+        ctx.font = `bold ${fontSize}px Arial`;
         ctx.fillStyle = color;
         ctx.fillText(text, x, y);
     }
@@ -351,15 +349,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Drawing Area Event Listeners
     drawingCanvas.addEventListener('mousedown', (e) => {
         if (isAddingText) {
+            // Immediately switch out of text mode
+            isAddingText = false;
+            drawingCanvas.style.cursor = 'default';
+
             if (currentText) {
-                drawText(currentText, e.offsetX, e.offsetY, currentTextColor, currentFontSize);
+                drawText(currentText, e.offsetX, e.offsetY, brushColor, currentFontSize);
                 saveCanvasState(); // Save state after adding text
                 showToast('Text added!', 'success');
                 textInput.value = ''; // Clear text input after adding
                 currentText = '';
             }
-            isAddingText = false;
-            drawingCanvas.style.cursor = 'default'; // Reset cursor
         } else {
             isDrawing = true;
             [lastX, lastY] = [e.offsetX, e.offsetY];
@@ -391,10 +391,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     textInput.addEventListener('input', (e) => {
         currentText = e.target.value;
-    });
-
-    textColorPicker.addEventListener('change', (e) => {
-        currentTextColor = e.target.value;
     });
 
     fontSizeInput.addEventListener('change', (e) => {
