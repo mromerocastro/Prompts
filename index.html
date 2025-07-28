@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VEO3 Prompt Generator</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LYGQYNR7DP"></script>
 <script>
@@ -16,221 +19,363 @@
 </script>
 </head>
 <body>
-    <div class="container">
-        <fieldset class="collapsible-fieldset collapsed">
-            <div class="collapsible-header">
-                <legend>Video Prompt Generator</legend>
-                <span class="collapse-icon">&#9660;</span>
+    <div class="container mt-5">
+        <div class="card bg-dark text-light shadow-lg mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#videoPromptGenerator" aria-expanded="true" aria-controls="videoPromptGenerator" role="button">
+                <h3 class="mb-0">Video Prompt Generator</h3>
+                <i class="bi bi-chevron-down collapse-icon"></i>
             </div>
-            <div class="collapsible-content">
-                <form id="prompt-form">
-                    
-
-                    <!-- SCENE -->
-                    <fieldset class="collapsible-fieldset collapsed">
-                        <div class="collapsible-header">
-                            <legend>Scene</legend>
-                            <span class="collapse-icon">&#9660;</span>
-                        </div>
-                        <div class="collapsible-content">
-                            <label for="scene-location">Location:</label>
-                            <textarea id="scene-location" name="scene-location" rows="4" placeholder="e.g., Abandoned mansion, bustling city street..."></textarea>
-
-                            <label for="scene-time_of_day">Time of Day:</label>
-                            <textarea id="scene-time_of_day" name="scene-time_of_day" rows="4" placeholder="e.g., Dusk, early morning, midnight..."></textarea>
-                            
-                            <label for="scene-environment">Environment:</label>
-                            <textarea id="scene-environment" name="scene-environment" rows="4" placeholder="e.g., Dusty Victorian foyer with cobwebs, chandelier..."></textarea>
-                            
-                            <label for="scene-audio">Audio Cues:</label>
-                            <textarea id="scene-audio" name="scene-audio" rows="4" placeholder="e.g., Ambient wind"></textarea>
-
-                            <label for="scene-visual">Visual Cues:</label>
-                            <textarea id="scene-visual" name="scene-visual" rows="4" placeholder="e.g., Character does not look at camera"></textarea>
-                        </div>
-                    </fieldset>
-
-                    <!-- CAMERA -->
-                    <fieldset class="collapsible-fieldset collapsed">
-                        <div class="collapsible-header">
-                            <legend>Camera</legend>
-                            <span class="collapse-icon">&#9660;</span>
-                        </div>
-                        <div class="collapsible-content">
-                            <label for="camera_movement">Camera Movement:</label>
-                            <select id="camera_movement" name="camera_movement">
-                                <option value="None">None</option>
-                                <option value="Static Shot (or fixed)">Static Shot (or fixed)</option>
-                                <option value="Pan (left)">Pan (left)</option>
-                                <option value="Pan (right)">Pan (right)</option>
-                                <option value="Tilt (up)">Tilt (up)</option>
-                                <option value="Tilt (down)">Tilt (down)</option>
-                                <option value="Dolly (In)">Dolly (In)</option>
-                                <option value="Dolly (Out)">Dolly (Out)</option>
-                                <option value="Zoom (In)">Zoom (In)</option>
-                                <option value="Zoom (Out)">Zoom (Out)</option>
-                                <option value="Truck (Left)">Truck (Left)</option>
-                                <option value="Truck (Right)">Truck (Right)</option>
-                                <option value="Pedestal (Up)">Pedestal (Up)</option>
-                                <option value="Pedestal (Down)">Pedestal (Down)</option>
-                                <option value="Crane Shot">Crane Shot</option>
-                                <option value="Aerial Shot">Aerial Shot</option>
-                                <option value="Drone Shot">Drone Shot</option>
-                                <option value="Handheld">Handheld</option>
-                                <option value="Shaky Cam">Shaky Cam</option>
-                                <option value="Whip Pan">Whip Pan</option>
-                                <option value="Arc Shot">Arc Shot</option>
-                            </select>
-
-                            <label for="lens_effects">Lens Effects:</label>
-                            <select id="lens_effects" name="lens_effects">
-                                <option value="None">None</option>
-                                <option value="Wide-Angle Lens (e.g., 24mm)">Wide-Angle Lens (e.g., 24mm)</option>
-                                <option value="Telephoto Lens (e.g., 85mm)">Telephoto Lens (e.g., 85mm)</option>
-                                <option value="Shallow Depth of Field">Shallow Depth of Field</option>
-                                <option value="Bokeh">Bokeh</option>
-                                <option value="Deep Depth of Field">Deep Depth of Field</option>
-                                <option value="Lens Flare">Lens Flare</option>
-                                <option value="Rack Focus">Rack Focus</option>
-                                <option value="Fisheye Lens Effect">Fisheye Lens Effect</option>
-                                <option value="Vertigo Effect (Dolly Zoom)">Vertigo Effect (Dolly Zoom)</option>
-                            </select>
-
-                            <label for="style">Style:</label>
-                            <select id="style" name="style">
-                                <option value="None">None</option>
-                                <option value="Photorealistic">Photorealistic</option>
-                                <option value="Cinematic">Cinematic</option>
-                                <option value="Vintage">Vintage</option>
-                                <option value="Japanese anime style">Japanese anime style</option>
-                                <option value="Claymation style">Claymation style</option>
-                                <option value="Stop-motion animation">Stop-motion animation</option>
-                                <option value="In the style of Van Gogh">In the style of Van Gogh</option>
-                                <option value="Surrealist painting">Surrealist painting</option>
-                                <option value="Monochromatic black and white">Monochromatic black and white</option>
-                                <option value="Vibrant and saturated">Vibrant and saturated</option>
-                                <option value="Film noir style">Film noir style</option>
-                                <option value="High-key lighting">High-key lighting</option>
-                                <option value="Low-key lighting">Low-key lighting</option>
-                                <option value="Golden hour glow">Golden hour glow</option>
-                                <option value="Volumetric lighting">Volumetric lighting</option>
-                                <option value="Backlighting to create a silhouette">Backlighting to create a silhouette</option>
-                            </select>
-
-                            <label for="temporal_elements">Temporal Elements:</label>
-                            <select id="temporal_elements" name="temporal_elements">
-                                <option value="None">None</option>
-                                <option value="Slow-motion">Slow-motion</option>
-                                <option value="Fast-paced action">Fast-paced action</option>
-                                <option value="Time-lapse">Time-lapse</option>
-                                <option value="Hyperlapse">Hyperlapse</option>
-                                <option value="Pulsating light">Pulsating light</option>
-                                <option value="Rhythmic movement">Rhythmic movement</option>
-                            </select>
-                        </div>
-                    </fieldset>
-
-                    <!-- CHARACTERS (DYNAMIC CONTAINER) -->
-                    <fieldset class="collapsible-fieldset collapsed">
-                        <div class="collapsible-header">
-                            <legend>Characters</legend>
-                            <span class="collapse-icon">&#9660;</span>
-                        </div>
-                        <div class="collapsible-content">
-                            <div id="characters-container">
-                                <!-- Characters will be added here by JavaScript -->
+            <div class="collapse show" id="videoPromptGenerator">
+                <div class="card-body">
+                    <form id="prompt-form">
+                        <!-- SCENE -->
+                        <div class="card bg-secondary text-light shadow-sm mb-3">
+                            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#sceneSection" aria-expanded="false" aria-controls="sceneSection" role="button">
+                                <h5 class="mb-0">Scene</h5>
+                                <i class="bi bi-chevron-down collapse-icon"></i>
                             </div>
-                            <button type="button" class="add-btn" id="add-character-btn">Add Character</button>
-                        </div>
-                    </fieldset>
-
-                    <!-- TIMELINE (DYNAMIC CONTAINER) -->
-                    <fieldset class="collapsible-fieldset collapsed">
-                        <div class="collapsible-header">
-                            <legend>Timeline</legend>
-                            <span class="collapse-icon">&#9660;</span>
-                        </div>
-                        <div class="collapsible-content">
-                            <div id="timeline-container">
-                                <!-- Timeline events will be added here by JavaScript -->
+                            <div class="collapse" id="sceneSection">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="scene-location" class="form-label">Location:</label>
+                                        <textarea id="scene-location" name="scene-location" class="form-control" rows="2" placeholder="e.g., Abandoned mansion, bustling city street..." required></textarea>
+                                        <div class="invalid-feedback">
+                                            Please provide a location.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="scene-time_of_day" class="form-label">Time of Day:</label>
+                                        <textarea id="scene-time_of_day" name="scene-time_of_day" class="form-control" rows="2" placeholder="e.g., Dusk, early morning, midnight..." required></textarea>
+                                        <div class="invalid-feedback">
+                                            Please provide a time of day.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="scene-environment" class="form-label">Environment:</label>
+                                        <textarea id="scene-environment" name="scene-environment" class="form-control" rows="2" placeholder="e.g., Dusty Victorian foyer with cobwebs, chandelier..." required></textarea>
+                                        <div class="invalid-feedback">
+                                            Please provide an environment.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="scene-audio" class="form-label">Audio Cues:</label>
+                                        <textarea id="scene-audio" name="scene-audio" class="form-control" rows="2" placeholder="e.g., Ambient wind" required></textarea>
+                                        <div class="invalid-feedback">
+                                            Please provide audio cues.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="scene-visual" class="form-label">Visual Cues:</label>
+                                        <textarea id="scene-visual" name="scene-visual" class="form-control" rows="2" placeholder="e.g., Character does not look at camera" required></textarea>
+                                        <div class="invalid-feedback">
+                                            Please provide visual cues.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <button type="button" class="add-btn" id="add-timeline-btn">Add Timeline Event</button>
                         </div>
-                    </fieldset>
 
-                    <button type="submit" id="generate-btn">Generate Prompt</button>
-                </form>
+                        <!-- CAMERA -->
+                        <div class="card bg-secondary text-light shadow-sm mb-3">
+                            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#cameraSection" aria-expanded="false" aria-controls="cameraSection" role="button">
+                                <h5 class="mb-0">Camera</h5>
+                                <i class="bi bi-chevron-down collapse-icon"></i>
+                            </div>
+                            <div class="collapse" id="cameraSection">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="camera_movement" class="form-label">Camera Movement:</label>
+                                        <select id="camera_movement" name="camera_movement" class="form-select" required>
+                                            <option value="">Select a movement</option>
+                                            <option value="None">None</option>
+                                            <option value="Static Shot (or fixed)">Static Shot (or fixed)</option>
+                                            <option value="Pan (left)">Pan (left)</option>
+                                            <option value="Pan (right)">Pan (right)</option>
+                                            <option value="Tilt (up)">Tilt (up)</option>
+                                            <option value="Tilt (down)">Tilt (down)</option>
+                                            <option value="Dolly (In)">Dolly (In)</option>
+                                            <option value="Dolly (Out)">Dolly (Out)</option>
+                                            <option value="Zoom (In)">Zoom (In)</option>
+                                            <option value="Zoom (Out)">Zoom (Out)</option>
+                                            <option value="Truck (Left)">Truck (Left)</option>
+                                            <option value="Truck (Right)">Truck (Right)</option>
+                                            <option value="Pedestal (Up)">Pedestal (Up)</option>
+                                            <option value="Pedestal (Down)">Pedestal (Down)</option>
+                                            <option value="Crane Shot">Crane Shot</option>
+                                            <option value="Aerial Shot">Aerial Shot</option>
+                                            <option value="Drone Shot">Drone Shot</option>
+                                            <option value="Handheld">Handheld</option>
+                                            <option value="Shaky Cam">Shaky Cam</option>
+                                            <option value="Whip Pan">Whip Pan</option>
+                                            <option value="Arc Shot">Arc Shot</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select a camera movement.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="lens_effects" class="form-label">Lens Effects:</label>
+                                        <select id="lens_effects" name="lens_effects" class="form-select" required>
+                                            <option value="">Select a lens effect</option>
+                                            <option value="None">None</option>
+                                            <option value="Wide-Angle Lens (e.g., 24mm)">Wide-Angle Lens (e.g., 24mm)</option>
+                                            <option value="Telephoto Lens (e.g., 85mm)">Telephoto Lens (e.g., 85mm)</option>
+                                            <option value="Shallow Depth of Field">Shallow Depth of Field</option>
+                                            <option value="Bokeh">Bokeh</option>
+                                            <option value="Deep Depth of Field">Deep Depth of Field</option>
+                                            <option value="Lens Flare">Lens Flare</option>
+                                            <option value="Rack Focus">Rack Focus</option>
+                                            <option value="Fisheye Lens Effect">Fisheye Lens Effect</option>
+                                            <option value="Vertigo Effect (Dolly Zoom)">Vertigo Effect (Dolly Zoom)</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select a lens effect.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="style" class="form-label">Style:</label>
+                                        <select id="style" name="style" class="form-select" required>
+                                            <option value="">Select a style</option>
+                                            <option value="None">None</option>
+                                            <option value="Photorealistic">Photorealistic</option>
+                                            <option value="Cinematic">Cinematic</option>
+                                            <option value="Vintage">Vintage</option>
+                                            <option value="Japanese anime style">Japanese anime style</option>
+                                            <option value="Claymation style">Claymation style</option>
+                                            <option value="Stop-motion animation">Stop-motion animation</option>
+                                            <option value="In the style of Van Gogh">In the style of Van Gogh</option>
+                                            <option value="Surrealist painting">Surrealist painting</option>
+                                            <option value="Monochromatic black and white">Monochromatic black and white</option>
+                                            <option value="Vibrant and saturated">Vibrant and saturated</option>
+                                            <option value="Film noir style">Film noir style</option>
+                                            <option value="High-key lighting">High-key lighting</option>
+                                            <option value="Low-key lighting">Low-key lighting</option>
+                                            <option value="Golden hour glow">Golden hour glow</option>
+                                            <option value="Volumetric lighting">Volumetric lighting</option>
+                                            <option value="Backlighting to create a silhouette">Backlighting to create a silhouette</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select a style.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="temporal_elements" class="form-label">Temporal Elements:</label>
+                                        <select id="temporal_elements" name="temporal_elements" class="form-select" required>
+                                            <option value="">Select temporal elements</option>
+                                            <option value="None">None</option>
+                                            <option value="Slow-motion">Slow-motion</option>
+                                            <option value="Fast-paced action">Fast-paced action</option>
+                                            <option value="Time-lapse">Time-lapse</option>
+                                            <option value="Hyperlapse">Hyperlapse</option>
+                                            <option value="Pulsating light">Pulsating light</option>
+                                            <option value="Rhythmic movement">Rhythmic movement</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Please select temporal elements.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="output-container">
-                    <h2>Generated Prompt</h2>
-                    <p id="output-sentence"></p>
-                    <div class="output-actions">
-                        <button id="copy-btn">Copy to Clipboard</button>
-                        <button id="clear-btn" class="danger-btn">Clear Form</button>
+                        <!-- CHARACTERS (DYNAMIC CONTAINER) -->
+                        <div class="card bg-secondary text-light shadow-sm mb-3">
+                            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#charactersSection" aria-expanded="false" aria-controls="charactersSection" role="button">
+                                <h5 class="mb-0">Characters</h5>
+                                <i class="bi bi-chevron-down collapse-icon"></i>
+                            </div>
+                            <div class="collapse" id="charactersSection">
+                                <div class="card-body">
+                                    <div id="characters-container">
+                                        <!-- Characters will be added here by JavaScript -->
+                                    </div>
+                                    <button type="button" class="btn btn-success mt-3" id="add-character-btn">Add Character</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TIMELINE (DYNAMIC CONTAINER) -->
+                        <div class="card bg-secondary text-light shadow-sm mb-3">
+                            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#timelineSection" aria-expanded="false" aria-controls="timelineSection" role="button">
+                                <h5 class="mb-0">Timeline</h5>
+                                <i class="bi bi-chevron-down collapse-icon"></i>
+                            </div>
+                            <div class="collapse" id="timelineSection">
+                                <div class="card-body">
+                                    <div id="timeline-container">
+                                        <!-- Timeline events will be added here by JavaScript -->
+                                    </div>
+                                    <button type="button" class="btn btn-success mt-3" id="add-timeline-btn">Add Timeline Event</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="generate-btn" class="btn btn-primary btn-lg w-100 mt-4">Generate Prompt</button>
+                    </form>
+
+                    <div class="output-container mt-5 p-4 bg-dark rounded shadow-lg">
+                        <h2 class="text-white mb-3">Generated Prompt</h2>
+                        <p id="output-sentence" class="lead text-white-50"></p>
+                        <div class="output-actions d-flex justify-content-center gap-3 mt-4">
+                            <button id="copy-btn" class="btn btn-info">Copy to Clipboard</button>
+                            <button id="clear-btn" class="btn btn-danger">Clear Form</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </fieldset>
+        </div>
 
-        <fieldset class="collapsible-fieldset collapsed">
-            <div class="collapsible-header">
-                <legend>Drawing Area</legend>
-                <span class="collapse-icon">&#9660;</span>
+        <div class="card bg-dark text-light shadow-lg mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#drawingArea" aria-expanded="false" aria-controls="drawingArea" role="button">
+                <h3 class="mb-0">Drawing Area</h3>
+                <i class="bi bi-chevron-down collapse-icon"></i>
             </div>
-            <div class="collapsible-content">
-                <div id="drawing-toolbar">
-                    <label for="color-picker">Color:</label>
-                    <input type="color" id="color-picker" value="#ff0000">
-                    <label for="brush-size">Brush Size:</label>
-                    <input type="range" id="brush-size" min="1" max="20" value="5">
-                    <input type="file" id="image-loader" accept="image/*">
-                    <button id="clear-canvas-btn">Clear Canvas</button>
-                    <button id="download-image-btn">Download Image</button>
+            <div class="collapse" id="drawingArea">
+                <div class="card-body">
+                    <div class="drawing-tools-section mb-4 pb-3 border-bottom border-secondary">
+                        <h4 class="text-white mb-3">Drawing Tools</h4>
+                        <div class="row g-3 align-items-center">
+                            <div class="col-auto">
+                                <label for="color-picker" class="form-label mb-0">Brush Color:</label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="color" id="color-picker" class="form-control form-control-color" value="#ff0000">
+                            </div>
+                            <div class="col-auto">
+                                <label for="brush-size" class="form-label mb-0">Brush Size:</label>
+                            </div>
+                            <div class="col">
+                                <input type="range" id="brush-size" class="form-range" min="1" max="20" value="5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-tools-section mb-4 pb-3 border-bottom border-secondary">
+                        <h4 class="text-white mb-3">Text Tools</h4>
+                        <div class="row g-3 align-items-center">
+                            <div class="col-auto">
+                                <label for="text-input" class="form-label mb-0">Text:</label>
+                            </div>
+                            <div class="col">
+                                <input type="text" id="text-input" class="form-control" placeholder="Enter text here">
+                            </div>
+                            <div class="col-auto">
+                                <label for="text-color-picker" class="form-label mb-0">Text Color:</label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="color" id="text-color-picker" class="form-control form-control-color" value="#000000">
+                            </div>
+                            <div class="col-auto">
+                                <label for="font-size" class="form-label mb-0">Font Size:</label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="number" id="font-size" class="form-control" min="10" max="100" value="24">
+                            </div>
+                            <div class="col-auto">
+                                <button id="add-text-btn" class="btn btn-primary">Add Text</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="canvas-actions-section mb-4 pb-3 border-bottom border-secondary">
+                        <h4 class="text-white mb-3">Canvas Actions</h4>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <label for="image-loader" class="btn btn-info mb-0">Load Image</label>
+                                <input type="file" id="image-loader" accept="image/*" style="display: none;">
+                            </div>
+                            <div class="d-flex gap-3">
+                                <button id="undo-btn" class="btn btn-warning">Undo</button>
+                                <button id="redo-btn" class="btn btn-warning">Redo</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="canvas-wrapper" style="position: relative; width: 100%; padding-bottom: 56.25%; margin-bottom: 15px;">
+                        <canvas id="drawing-canvas" class="border border-secondary rounded" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--dark-bg-light);"></canvas>
+                    </div>
+                    <div class="canvas-bottom-actions d-flex justify-content-center gap-3 mt-3">
+                        <button id="clear-canvas-btn" class="btn btn-danger">Clear Canvas</button>
+                        <button id="download-image-btn" class="btn btn-success">Download Image</button>
+                    </div>
                 </div>
-                <canvas id="drawing-canvas"></canvas>
             </div>
-        </fieldset>
+        </div>
     </div>
 
-    <!-- Toast container for notifications -->
-    <div id="toast-container"></div>
-
-    <!-- Templates for dynamic elements -->
+    <!-- TEMPLATES -->
     <template id="character-template">
-        <div class="dynamic-item" data-character-id="">
-            <button type="button" class="remove-btn" title="Remove character">X</button>
-            <h4>Character</h4>
-            <label>Description:</label>
-            <textarea name="char_desc" rows="3" placeholder="e.g., Chubby, balding, in his 50s. Wears a black T-shirt..."></textarea>
-            <label>Wardrobe:</label>
-            <textarea name="char_wardrobe" rows="3" placeholder="e.g., Black t-shirt, ripped jeans, leather jacket..."></textarea>
-            <label>Dialogue:</label>
-            <textarea name="char_dialogue" rows="3" placeholder="e.g., 'I have a bad feeling about this.'"></textarea>
-            <label>Action:</label>
-            <textarea name="char_action" rows="3" placeholder="e.g., Walks into the room and looks around."></textarea>
+        <div class="dynamic-item card bg-dark-light text-light p-3 mb-3" data-character-id="">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0">Character</h6>
+                <button type="button" class="btn-close btn-close-white remove-btn" aria-label="Close"></button>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Description:</label>
+                <textarea name="char_desc" class="form-control" rows="2" placeholder="e.g., A weary detective, a cheerful robot..."></textarea>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Wardrobe:</label>
+                <textarea name="char_wardrobe" class="form-control" rows="2" placeholder="e.g., Trench coat and fedora, sleek metallic chassis..."></textarea>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Dialogue:</label>
+                <textarea name="char_dialogue" class="form-control" rows="2" placeholder="e.g., 'I've seen it all...', 'Beep boop!'..."></textarea>
+            </div>
+            <div>
+                <label class="form-label">Action:</label>
+                <textarea name="char_action" class="form-control" rows="2" placeholder="e.g., Sips coffee, scans the area..."></textarea>
+            </div>
         </div>
     </template>
 
     <template id="timeline-event-template">
-        <div class="dynamic-item" data-timeline-id="">
-            <button type="button" class="remove-btn" title="Remove event">X</button>
-            <h4>Timeline Event</h4>
-            <label>Timestamp:</label>
-            <input type="text" name="timeline_timestamp" placeholder="e.g., 00:00-00:01">
-            <label>Action:</label>
-            <textarea name="timeline_action" rows="3" placeholder="e.g., A cat jumps on the table."></textarea>
-            <label>Audio:</label>
-            <textarea name="timeline_audio" rows="3" placeholder="e.g., A soft meow."></textarea>
+        <div class="dynamic-item card bg-dark-light text-light p-3 mb-3" data-timeline-id="">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0">Timeline Event</h6>
+                <button type="button" class="btn-close btn-close-white remove-btn" aria-label="Close"></button>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Timestamp:</label>
+                <input type="text" name="timeline_timestamp" class="form-control" placeholder="e.g., 0:00, 0:15, 1:30...">
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Action:</label>
+                <textarea name="timeline_action" class="form-control" rows="2" placeholder="e.g., A car speeds by, a bird sings..."></textarea>
+            </div>
+            <div>
+                <label class="form-label">Audio:</label>
+                <textarea name="timeline_audio" class="form-control" rows="2" placeholder="e.g., Sound of screeching tires, gentle birdsong..."></textarea>
+            </div>
         </div>
     </template>
-
-    <template id="list-item-template">
-        <div class="list-item">
-            <span class="editable-text" contenteditable="true"></span>
-            <button type="button" class="remove-btn" title="Remove item">X</button>
-        </div>
-    </template>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -20,18 +20,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearCanvasBtn = document.getElementById('clear-canvas-btn');
     const imageLoader = document.getElementById('image-loader');
     const downloadImageBtn = document.getElementById('download-image-btn');
+    const undoBtn = document.getElementById('undo-btn');
+    const redoBtn = document.getElementById('redo-btn');
+    console.log('undoBtn:', undoBtn);
+    console.log('redoBtn:', redoBtn);
+
+    // Text Drawing DOM References
+    const textInput = document.getElementById('text-input');
+    const textColorPicker = document.getElementById('text-color-picker');
+    const fontSizeInput = document.getElementById('font-size');
+    const addTextBtn = document.getElementById('add-text-btn');
 
     // --- UTILITY FUNCTIONS ---
     function showToast(message, type = 'info') {
         const toastContainer = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        toast.textContent = message;
-        toastContainer.appendChild(toast);
-        setTimeout(() => toast.classList.add('show'), 10);
+        const alertDiv = document.createElement('div');
+        alertDiv.classList.add('alert', 'alert-dismissible', 'fade', 'show', 'position-absolute', 'bottom-0', 'end-0', 'm-3');
+        alertDiv.setAttribute('role', 'alert');
+
+        let alertClass = 'alert-info';
+        if (type === 'success') {
+            alertClass = 'alert-success';
+        } else if (type === 'error') {
+            alertClass = 'alert-danger';
+        }
+        alertDiv.classList.add(alertClass);
+
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        toastContainer.appendChild(alertDiv);
+
         setTimeout(() => {
-            toast.classList.remove('show');
-            toast.addEventListener('transitionend', () => toast.remove());
+            const bsAlert = new bootstrap.Alert(alertDiv);
+            bsAlert.close();
         }, 3000);
     }
 
@@ -48,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const characterEl = cloneFromTemplate(characterTemplate);
         characterEl.dataset.characterId = `char-${Date.now()}`;
         charactersContainer.appendChild(characterEl);
+        characterEl.classList.add('fade-in'); // Add fade-in class
         scrollToElement(characterEl);
     }
 
@@ -55,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const timelineEl = cloneFromTemplate(timelineEventTemplate);
         timelineEl.dataset.timelineId = `timeline-${Date.now()}`;
         timelineContainer.appendChild(timelineEl);
+        timelineEl.classList.add('fade-in'); // Add fade-in class
         scrollToElement(timelineEl);
     }
 
@@ -89,10 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         charactersContainer.querySelectorAll('[data-character-id]').forEach(charEl => {
-            const description = charEl.querySelector('[name="char_desc"]').value;
-            if (!description) return;
             const characterData = {
-                description: description,
+                description: charEl.querySelector('[name="char_desc"]').value,
                 wardrobe: charEl.querySelector('[name="char_wardrobe"]').value,
                 dialogue: charEl.querySelector('[name="char_dialogue"]').value,
                 action: charEl.querySelector('[name="char_action"]').value
@@ -104,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
         timelineContainer.querySelectorAll('[data-timeline-id]').forEach((eventEl, index) => {
             const timestamp = eventEl.querySelector('[name="timeline_timestamp"]').value;
             const action = eventEl.querySelector('[name="timeline_action"]').value;
-            if (!action) return; // Skip empty actions
 
             prompt.timeline.push({
                 sequence: index + 1,
@@ -183,14 +205,76 @@ document.addEventListener('DOMContentLoaded', () => {
     let brushColor = colorPicker.value;
     let brushSize = brushSizeInput.value;
 
+    // Text Drawing State
+    let isAddingText = false;
+    let currentText = '';
+    let currentTextColor = textColorPicker.value;
+    let currentFontSize = fontSizeInput.value;
+
+    // Undo/Redo History
+    const canvasHistory = [];
+    let historyPointer = -1;
+
+    function saveCanvasState() {
+        // Clear any redo states if a new action is performed
+        if (historyPointer < canvasHistory.length - 1) {
+            canvasHistory.splice(historyPointer + 1);
+        }
+        canvasHistory.push(drawingCanvas.toDataURL());
+        historyPointer = canvasHistory.length - 1;
+        updateUndoRedoButtons();
+    }
+
+    function restoreCanvasState() {
+        if (historyPointer < 0) return;
+
+        const img = new Image();
+        img.onload = () => {
+            ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+            ctx.drawImage(img, 0, 0);
+        };
+        img.src = canvasHistory[historyPointer];
+    }
+
+    function undo() {
+        if (historyPointer > 0) {
+            historyPointer--;
+            restoreCanvasState();
+        } else if (historyPointer === 0) {
+            // If at the first state, clear canvas
+            historyPointer--;
+            ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+        }
+        updateUndoRedoButtons();
+    }
+
+    function redo() {
+        if (historyPointer < canvasHistory.length - 1) {
+            historyPointer++;
+            restoreCanvasState();
+        }
+        updateUndoRedoButtons();
+    }
+
+    function updateUndoRedoButtons() {
+        undoBtn.disabled = historyPointer <= 0;
+        redoBtn.disabled = historyPointer >= canvasHistory.length - 1;
+    }
+
     function setupCanvas() {
-        // Set canvas dimensions to match its display size
-        drawingCanvas.width = drawingCanvas.offsetWidth;
-        drawingCanvas.height = drawingCanvas.offsetHeight;
+        const canvas = drawingCanvas;
+        // Sync canvas resolution with its display size
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+
+        // Re-apply drawing styles, as they can be reset when canvas size changes
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
-        ctx.strokeStyle = brushColor;
-        ctx.lineWidth = brushSize;
+        ctx.strokeStyle = brushColor; // Re-apply current color
+        ctx.lineWidth = brushSize;   // Re-apply current brush size
+
+        // Restore the last state after resizing
+        restoreCanvasState(); // Always restore state to redraw content
     }
 
     function draw(e) {
@@ -200,6 +284,12 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.lineTo(e.offsetX, e.offsetY);
         ctx.stroke();
         [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+
+    function drawText(text, x, y, color, fontSize) {
+        ctx.font = `${fontSize}px Arial`;
+        ctx.fillStyle = color;
+        ctx.fillText(text, x, y);
     }
 
     // --- EVENT LISTENERS ---
@@ -215,6 +305,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
+        if (!form.checkValidity()) {
+            e.stopPropagation();
+            // Find all invalid fields
+            const invalidFields = form.querySelectorAll(':invalid');
+            invalidFields.forEach(field => {
+                // Find the closest parent collapse element
+                let currentParent = field.parentElement;
+                while (currentParent && !currentParent.classList.contains('collapse')) {
+                    currentParent = currentParent.parentElement;
+                }
+                if (currentParent) {
+                    // Ensure the collapse element is shown
+                    const bsCollapse = new bootstrap.Collapse(currentParent, { toggle: false });
+                    bsCollapse.show();
+                }
+            });
+            showToast('Please fill out all required fields.', 'error');
+        }
+        form.classList.add('was-validated');
+
         const promptData = generatePromptObject();
         if (promptData) {
             const sentence = generateSentence(promptData);
@@ -240,12 +350,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Drawing Area Event Listeners
     drawingCanvas.addEventListener('mousedown', (e) => {
-        isDrawing = true;
-        [lastX, lastY] = [e.offsetX, e.offsetY];
+        if (isAddingText) {
+            if (currentText) {
+                drawText(currentText, e.offsetX, e.offsetY, currentTextColor, currentFontSize);
+                saveCanvasState(); // Save state after adding text
+                showToast('Text added!', 'success');
+                textInput.value = ''; // Clear text input after adding
+                currentText = '';
+            }
+            isAddingText = false;
+            drawingCanvas.style.cursor = 'default'; // Reset cursor
+        } else {
+            isDrawing = true;
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+        }
     });
     drawingCanvas.addEventListener('mousemove', draw);
-    drawingCanvas.addEventListener('mouseup', () => isDrawing = false);
-    drawingCanvas.addEventListener('mouseout', () => isDrawing = false);
+    drawingCanvas.addEventListener('mouseup', () => {
+        if (isDrawing) {
+            isDrawing = false;
+            saveCanvasState(); // Save state after drawing
+        }
+    });
+    drawingCanvas.addEventListener('mouseout', () => {
+        if (isDrawing) {
+            isDrawing = false;
+            saveCanvasState(); // Save state if mouse leaves canvas while drawing
+        }
+    });
 
     colorPicker.addEventListener('change', (e) => {
         brushColor = e.target.value;
@@ -257,8 +389,32 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.lineWidth = brushSize;
     });
 
+    textInput.addEventListener('input', (e) => {
+        currentText = e.target.value;
+    });
+
+    textColorPicker.addEventListener('change', (e) => {
+        currentTextColor = e.target.value;
+    });
+
+    fontSizeInput.addEventListener('change', (e) => {
+        currentFontSize = e.target.value;
+    });
+
+    addTextBtn.addEventListener('click', () => {
+        if (textInput.value.trim() === '') {
+            showToast('Please enter text to add.', 'error');
+            return;
+        }
+        isAddingText = true;
+        currentText = textInput.value.trim();
+        showToast('Click on the canvas to position the text.', 'info');
+        drawingCanvas.style.cursor = 'crosshair'; // Change cursor to indicate text mode
+    });
+
     clearCanvasBtn.addEventListener('click', () => {
         ctx.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+        saveCanvasState(); // Save state after clearing
     });
 
     downloadImageBtn.addEventListener('click', () => {
@@ -268,6 +424,17 @@ document.addEventListener('DOMContentLoaded', () => {
         link.href = image;
         link.click();
     });
+
+    if (undoBtn) {
+        undoBtn.addEventListener('click', undo); // Undo button event listener
+    } else {
+        console.error('Element with ID "undo-btn" not found.');
+    }
+    if (redoBtn) {
+        redoBtn.addEventListener('click', redo); // Redo button event listener
+    } else {
+        console.error('Element with ID "redo-btn" not found.');
+    }
 
     imageLoader.addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -297,6 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     console.log('Drawing image with:', { x, y, newWidth, newHeight });
                     ctx.drawImage(img, x, y, newWidth, newHeight);
+                    saveCanvasState(); // Save state after loading image
                 };
                 img.onerror = () => {
                     console.error('Error loading image.');
@@ -317,31 +485,48 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- INITIALIZATION ---
     clearForm(false);
     setupCanvas();
+    saveCanvasState(); // Save initial blank state
 
     // Adjust canvas size on window resize
     window.addEventListener('resize', setupCanvas);
 
-    // Event listener for drawing area collapsible fieldset
-    const drawingAreaFieldset = Array.from(document.querySelectorAll('.collapsible-fieldset')).find(fieldset => {
-        const legend = fieldset.querySelector('.collapsible-header legend');
-        return legend && legend.textContent.trim() === 'Drawing Area';
+    // Initialize collapse icons
+    document.querySelectorAll('.card-header[data-bs-toggle="collapse"]').forEach(header => {
+        const icon = header.querySelector('.collapse-icon');
+        const targetId = header.getAttribute('data-bs-target');
+        const targetElement = document.querySelector(targetId);
+        if (icon && targetElement) {
+            if (targetElement.classList.contains('show')) {
+                icon.classList.add('bi-chevron-up'); // Up arrow
+            } else {
+                icon.classList.add('bi-chevron-down'); // Down arrow
+            }
+        }
     });
 
-    if (drawingAreaFieldset) {
-        drawingAreaFieldset.querySelector('.collapsible-header').addEventListener('click', () => {
-            // Ensure canvas is correctly sized when expanded
-            if (!drawingAreaFieldset.classList.contains('collapsed')) {
-                setupCanvas();
-            }
+    // Event listener for drawing area collapse
+    const drawingAreaCollapse = document.getElementById('drawingArea');
+    if (drawingAreaCollapse) {
+        drawingAreaCollapse.addEventListener('shown.bs.collapse', () => {
+            setupCanvas();
         });
     }
 
-    document.querySelectorAll('.collapsible-fieldset').forEach(fieldset => {
-        const header = fieldset.querySelector('.collapsible-header');
-        if (header) {
-            header.addEventListener('click', () => {
-                fieldset.classList.toggle('collapsed');
-            });
-        }
+    // Update collapse icons
+    document.querySelectorAll('.card-header[data-bs-toggle="collapse"]').forEach(header => {
+        header.addEventListener('click', function() {
+            const icon = this.querySelector('.collapse-icon');
+            if (icon) {
+                const targetId = this.getAttribute('data-bs-target');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement.classList.contains('show')) {
+                    icon.classList.remove('bi-chevron-up');
+                    icon.classList.add('bi-chevron-down');
+                } else {
+                    icon.classList.remove('bi-chevron-down');
+                    icon.classList.add('bi-chevron-up');
+                }
+            }
+        });
     });
 });
