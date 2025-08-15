@@ -88,12 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- DATA & FORM LOGIC ---
     function generatePromptObject() {
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            showToast('Please fill out all required fields.', 'error');
-            return null;
-        }
-
         const prompt = {
             scene: {
                 environment: document.getElementById('scene-environment').value,
@@ -303,31 +297,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        if (!form.checkValidity()) {
-            e.stopPropagation();
-            // Find all invalid fields
-            const invalidFields = form.querySelectorAll(':invalid');
+        e.stopPropagation();
+
+        // Remove previous validation states
+        form.classList.remove('was-validated');
+
+        // Find all invalid fields to open their sections
+        const invalidFields = form.querySelectorAll(':invalid');
+        if (invalidFields.length > 0) {
             invalidFields.forEach(field => {
-                // Find the closest parent collapse element
-                let currentParent = field.parentElement;
-                while (currentParent && !currentParent.classList.contains('collapse')) {
-                    currentParent = currentParent.parentElement;
-                }
-                if (currentParent) {
-                    // Ensure the collapse element is shown
-                    const bsCollapse = new bootstrap.Collapse(currentParent, { toggle: false });
+                let parentCollapse = field.closest('.collapse');
+                if (parentCollapse && !parentCollapse.classList.contains('show')) {
+                    const bsCollapse = new bootstrap.Collapse(parentCollapse, { toggle: false });
                     bsCollapse.show();
                 }
             });
-            showToast('Please fill out all required fields.', 'error');
         }
-        form.classList.add('was-validated');
 
-        const promptData = generatePromptObject();
-        if (promptData) {
-            const sentence = generateSentence(promptData);
-            outputSentence.textContent = sentence;
+        // Now, check validity after potentially showing sections
+        if (!form.checkValidity()) {
+            showToast('Please fill out all required fields.', 'error');
+        } else {
+            const promptData = generatePromptObject();
+            if (promptData) {
+                const sentence = generateSentence(promptData);
+                outputSentence.textContent = sentence;
+                showToast('Prompt generated successfully!', 'success');
+            }
         }
+
+        // Add validation class to show feedback
+        form.classList.add('was-validated');
     });
 
     copyBtn.addEventListener('click', () => {
